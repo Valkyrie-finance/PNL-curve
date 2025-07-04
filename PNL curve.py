@@ -3,6 +3,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
+import os
+
+print("Current working directory:", os.getcwd())
 
 # Read data from CSV file
 # Expected CSV format:
@@ -96,19 +99,10 @@ drawdown = twr_series - roll_max
 max_drawdown = drawdown.min()  # This will be negative
 max_drawdown_pct = abs(max_drawdown)
 
-print(f"Max Drawdown (TWR): {max_drawdown_pct:.2f}%")
+final_twr = valid_df['TWR'].ffill().iloc[-1]
+final_btc = valid_df['BTC_Return'].ffill().iloc[-1]
 
-# Optionally, annotate the max drawdown point on the chart
-max_dd_idx = drawdown.idxmin()
-max_dd_date = valid_df.loc[max_dd_idx, 'Date']
-max_dd_value = twr_series.iloc[max_dd_idx]
-ax1.annotate(f"Max DD: -{max_drawdown_pct:.2f}%",
-             xy=(max_dd_date, max_dd_value),
-             xytext=(30, -60),
-             textcoords='offset points',
-             arrowprops=dict(arrowstyle='->', color='red', lw=2),
-             fontsize=15, color='red', fontweight='bold',
-             bbox=dict(boxstyle='round,pad=0.4', fc='black', ec='red', lw=2, alpha=0.95))
+print(f"Max Drawdown (TWR): {max_drawdown_pct:.2f}%")
 
 # Show only a subset of x-axis date labels for clarity
 N = max(1, len(valid_df) // 10)  # Show about 10 date labels
@@ -130,7 +124,11 @@ ax1.set_xlabel('Date', fontsize=16, color='white', fontweight='bold')
 if ln3 is not None:
     legend = ax1.legend(
         [ln1[0], ln2[0], ln3[0]],
-        ['TWR (Portfolio Return %)', 'BTC Return (%)', 'Deposits'],
+        [
+            f"TWR (Portfolio Return %): {final_twr:.2f}% | Max DD: {max_drawdown_pct:.2f}%",
+            f"BTC Return (%): {final_btc:.2f}%",
+            'Deposits'
+        ],
         loc='lower center',
         bbox_to_anchor=(0.5, -0.28),  # Move legend slightly lower
         ncol=3,
@@ -142,7 +140,10 @@ if ln3 is not None:
 else:
     legend = ax1.legend(
         [ln1[0], ln2[0]],
-        ['TWR (Portfolio Return %)', 'BTC Return (%)'],
+        [
+            f"TWR (Portfolio Return %): {final_twr:.2f}% | Max DD: {max_drawdown_pct:.2f}%",
+            f"BTC Return (%): {final_btc:.2f}%"
+        ],
         loc='lower center',
         bbox_to_anchor=(0.5, -0.28),  # Move legend slightly lower
         ncol=2,
@@ -163,24 +164,6 @@ fig.subplots_adjust(bottom=0.28)  # Increase bottom margin for clarity
 
 # Only use rows with valid PortfolioValue for x-axis limits
 ax1.set_xlim(valid_df['Date'].min(), valid_df['Date'].max())
-
-# Move TWR and BTC annotation boxes to the left
-final_date = valid_df['Date'].iloc[-1]
-ax1.annotate(f"TWR: {valid_df['TWR'].ffill().iloc[-1]:.2f}%",
-             xy=(final_date, valid_df['TWR'].ffill().iloc[-1]),
-             xytext=(-120, 50),  # Move higher
-             textcoords='offset points',
-             arrowprops=dict(arrowstyle='->', color='#00bfff', lw=2),
-             fontsize=18, color='#00bfff', fontweight='bold',
-             bbox=dict(boxstyle='round,pad=0.4', fc='black', ec='#00bfff', lw=2, alpha=0.95))
-
-ax1.annotate(f"BTC: {valid_df['BTC_Return'].ffill().iloc[-1]:.2f}%",
-             xy=(final_date, valid_df['BTC_Return'].ffill().iloc[-1]),
-             xytext=(-120, 30),  # Move left
-             textcoords='offset points',
-             arrowprops=dict(arrowstyle='->', color='yellow', lw=2),
-             fontsize=18, color='yellow', fontweight='bold',
-             bbox=dict(boxstyle='round,pad=0.4', fc='black', ec='yellow', lw=2, alpha=0.95))
 
 plt.show()
 
