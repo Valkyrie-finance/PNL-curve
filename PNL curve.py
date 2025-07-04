@@ -13,7 +13,7 @@ print("Current working directory:", os.getcwd())
 # 2025-01-01,500000,10000,105642.93
 # 2025-01-02,550000,5000,105594.01
 # etc...
-df = pd.read_csv('portfolio_data.csv')
+df = pd.read_csv('portfolio_data_template.csv')
 df['Date'] = pd.to_datetime(df['Date'])
 # Convert columns to numeric, coercing errors to NaN
 df['PortfolioValue'] = pd.to_numeric(df['PortfolioValue'], errors='coerce')
