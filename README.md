@@ -6,8 +6,7 @@ This folder contains scripts for tracking and visualizing your portfolio's perfo
 
 1. **Clone or download this repository.**
 2. **Copy the template CSV:**
-   - Duplicate `portfolio_data_template.csv` and rename the copy to `portfolio_data.csv`.
-   - Fill in your own data in `portfolio_data.csv` (do not edit the template).
+  - Fill in your own data in `portfolio_data.csv` (do not edit the headers).
 3. **Run the scripts:**
    - `get_bitcoin_price.py` will update BTC prices in your portfolio data.
    - `PNL curve.py` will plot your portfolio performance and compare it to BTC.
@@ -16,8 +15,6 @@ This folder contains scripts for tracking and visualizing your portfolio's perfo
 - `PNL curve.py`: Main script for plotting portfolio and BTC performance.
 - `get_bitcoin_price.py`: Script to fetch and update BTC prices for your portfolio dates.
 - `portfolio_data_template.csv`: Blank template for your portfolio data. Copy and rename to `portfolio_data.csv` before use.
-- `.gitignore`: Prevents your real `portfolio_data.csv` from being uploaded to GitHub.
-
 ## CSV Format
 The CSV should have the following columns:
 ```
@@ -30,4 +27,3 @@ Date,PortfolioValue,DepositsWithdrawals,BTC_Price
 
 ## Notes
 - Only the template CSV is tracked in git. Your real data stays private.
-- For any issues or questions, open an issue or contact [valkyrie-finance](https://github.com/valkyrie-finance). 
